@@ -111,7 +111,6 @@ class ZivpnService : VpnService() {
             TProxyStartService(configFile.absolutePath, fd)
             Log.i("TunService", "Native Tunnel Started")
             
-            val prefs = getSharedPreferences("FlutterSharedPreferences", MODE_PRIVATE)
             prefs.edit().putBoolean("flutter.vpn_running", true).apply()
 
         } catch (e: Throwable) {
