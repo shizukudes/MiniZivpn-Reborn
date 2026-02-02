@@ -13,7 +13,7 @@ import java.util.LinkedList
  * ZIVPN TunService
  * Handles the VpnService interface and integrates with hev-socks5-tunnel.
  */
-class TunService : VpnService() {
+class ZivpnService : VpnService() {
 
     companion object {
         const val ACTION_CONNECT = "com.minizivpn.app.CONNECT"

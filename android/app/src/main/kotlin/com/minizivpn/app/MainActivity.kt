@@ -83,8 +83,8 @@ class MainActivity: FlutterActivity() {
             result.success("REQUEST_PERMISSION")
             sendToLog("Requesting VPN permission...")
         } else {
-            val serviceIntent = Intent(this, TunService::class.java)
-            serviceIntent.action = TunService.ACTION_CONNECT
+            val serviceIntent = Intent(this, ZivpnService::class.java)
+            serviceIntent.action = ZivpnService.ACTION_CONNECT
             startService(serviceIntent)
             result.success("STARTED")
             sendToLog("VPN Service started.")
@@ -92,8 +92,8 @@ class MainActivity: FlutterActivity() {
     }
 
     private fun stopVpn() {
-        val serviceIntent = Intent(this, TunService::class.java)
-        serviceIntent.action = TunService.ACTION_DISCONNECT
+        val serviceIntent = Intent(this, ZivpnService::class.java)
+        serviceIntent.action = ZivpnService.ACTION_DISCONNECT
         startService(serviceIntent)
         sendToLog("VPN Service stopped.")
     }
@@ -102,8 +102,8 @@ class MainActivity: FlutterActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_VPN_CODE) {
             if (resultCode == RESULT_OK) {
-                val serviceIntent = Intent(this, TunService::class.java)
-                serviceIntent.action = TunService.ACTION_CONNECT
+                val serviceIntent = Intent(this, ZivpnService::class.java)
+                serviceIntent.action = ZivpnService.ACTION_CONNECT
                 startService(serviceIntent)
                 sendToLog("VPN permission granted. Starting service.")
             } else {
@@ -223,8 +223,8 @@ class MainActivity: FlutterActivity() {
     }
 
     private fun stopEngine() {
-        val intent = Intent(this, TunService::class.java)
-        intent.action = TunService.ACTION_DISCONNECT
+        val intent = Intent(this, ZivpnService::class.java)
+        intent.action = ZivpnService.ACTION_DISCONNECT
         startService(intent)
 
         processes.forEach { 
