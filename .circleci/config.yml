@@ -49,6 +49,23 @@ jobs:
           command: flutter pub get
 
       - run:
+          name: Setup Keystore
+          command: |
+            # Check if KEYSTORE_BASE64 secret is available
+            if [ -n "$KEYSTORE_BASE64" ]; then
+              echo "Decoding Release Keystore..."
+              echo $KEYSTORE_BASE64 | base64 --decode > release.jks
+              echo 'export KEYSTORE_PATH="$PWD/release.jks"' >> $BASH_ENV
+            else
+              echo "Secrets not found. Generating Debug Keystore for fallback..."
+              mkdir -p ~/.android
+              keytool -genkey -v -keystore ~/.android/debug.keystore \
+                -storepass android -alias androiddebugkey -keypass android \
+                -keyalg RSA -keysize 2048 -validity 10000 \
+                -dname "CN=Android Debug,O=Android,C=US"
+            fi
+
+      - run:
           name: Build APK
           command: flutter build apk --release --target-platform android-arm64
 
