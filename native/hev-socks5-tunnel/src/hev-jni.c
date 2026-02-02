@@ -77,7 +77,7 @@ JNI_OnLoad (JavaVM *vm, void *reserved)
         return 0;
     }
 
-    klass = (*env)->FindClass (env, "com/minizivpn/app/TunService");
+    klass = (*env)->FindClass (env, "com/minizivpn/app/ZivpnService");
     (*env)->RegisterNatives (env, klass, native_methods,
                              N_ELEMENTS (native_methods));
     (*env)->DeleteLocalRef (env, klass);
