@@ -1,15 +1,23 @@
-# Flutter Wrapper
+# Flutter standard rules
 -keep class io.flutter.app.** { *; }
--keep class io.flutter.plugin.**  { *; }
--keep class io.flutter.util.**  { *; }
--keep class io.flutter.view.**  { *; }
--keep class io.flutter.**  { *; }
--keep class io.flutter.plugins.**  { *; }
+-keep class io.flutter.plugin.** { *; }
+-keep class io.flutter.util.** { *; }
+-keep class io.flutter.view.** { *; }
+-keep class io.flutter.** { *; }
+-keep class io.flutter.plugins.** { *; }
 
-# Keep TunService for JNI
--keep class com.minizivpn.app.TunService { *; }
--keepnames class com.minizivpn.app.TunService
+# Keep our VPN Service and its native methods
+-keep class com.minizivpn.app.ZivpnService {
+    native <methods>;
+    public <methods>;
+}
 
-# Ignore Play Core classes (we don't use dynamic features)
--dontwarn com.google.android.play.core.**
--dontwarn io.flutter.embedding.engine.deferredcomponents.**
+# Keep MainActivity native communication
+-keep class com.minizivpn.app.MainActivity {
+    public <methods>;
+}
+
+# General native method preservation
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
