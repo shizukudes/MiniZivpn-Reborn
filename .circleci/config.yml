@@ -69,9 +69,14 @@ jobs:
           name: Build APK
           command: flutter build apk --release --target-platform android-arm64
 
+      - run:
+          name: List Build Output (Debug)
+          command: find build/app/outputs/ -name "*.apk"
+          when: always
+
       - store_artifacts:
-          path: build/app/outputs/flutter-apk/app-release.apk
-          destination: ZIVPN-Turbo-Release.apk
+          path: build/app/outputs/flutter-apk/
+          destination: build-outputs
 
 workflows:
   version: 2
