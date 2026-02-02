@@ -1,0 +1,67 @@
+version: 2.1
+
+executors:
+  android-executor:
+    docker:
+      - image: cimg/android:2024.01.1
+    environment:
+      FLUTTER_VERSION: "3.19.0"
+      Note: "Using standard Android image and installing Flutter manually for control"
+
+jobs:
+  build-android:
+    executor: android-executor
+    resource_class: large
+    steps:
+      - checkout
+
+      - run:
+          name: Install Flutter
+          command: |
+            cd ~
+            git clone https://github.com/flutter/flutter.git -b stable
+            echo 'export PATH="$PATH:$HOME/flutter/bin"' >> $BASH_ENV
+            source $BASH_ENV
+            flutter doctor
+
+      - run:
+          name: Install NDK
+          command: |
+            echo "y" | sdkmanager "ndk;27.0.12077973" "cmake;3.22.1"
+
+      - run:
+          name: Build Native Tunnel (hev-socks5)
+          command: |
+            cd native/hev-socks5-tunnel
+            $ANDROID_HOME/ndk/27.0.12077973/ndk-build \
+              NDK_PROJECT_PATH=. \
+              APP_BUILD_SCRIPT=Android.mk \
+              APP_ABI=arm64-v8a \
+              APP_PLATFORM=android-24 \
+              NDK_APPLICATION_MK=Application.mk
+            
+            # Move result to jniLibs
+            mkdir -p ../../android/app/src/main/jniLibs/arm64-v8a/
+            cp libs/arm64-v8a/libhev-socks5-tunnel.so ../../android/app/src/main/jniLibs/arm64-v8a/
+
+      - run:
+          name: Flutter Dependencies
+          command: flutter pub get
+
+      - run:
+          name: Build APK
+          command: flutter build apk --release --target-platform android-arm64
+
+      - store_artifacts:
+          path: build/app/outputs/flutter-apk/app-release.apk
+          destination: ZIVPN-Turbo-Release.apk
+
+workflows:
+  version: 2
+  build-workflow:
+    jobs:
+      - build-android:
+          filters:
+            branches:
+              only:
+                - main
