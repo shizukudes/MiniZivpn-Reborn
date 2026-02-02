@@ -8,11 +8,13 @@ import java.io.File
 import android.app.PendingIntent
 import java.net.InetAddress
 import java.util.LinkedList
+import androidx.annotation.Keep
 
 /**
  * ZIVPN TunService
  * Handles the VpnService interface and integrates with hev-socks5-tunnel.
  */
+@Keep
 class ZivpnService : VpnService() {
 
     companion object {
@@ -63,6 +65,7 @@ class ZivpnService : VpnService() {
         val builder = Builder()
         builder.setSession("MiniZivpn")
         builder.setConfigureIntent(pendingIntent)
+        builder.setMtu(1280) // Lower MTU to prevent packet fragmentation (Crucial for Browsing)
         builder.addRoute("0.0.0.0", 0) // Route ALL traffic
         
         // CRITICAL: Exclude own app to prevent VPN Loop
@@ -73,10 +76,9 @@ class ZivpnService : VpnService() {
         }
         
         // DNS is REQUIRED for internet to work properly through VPN
-        // Point DNS to our internal MapDNS primary, then fallbacks
-        builder.addDnsServer("198.18.0.2")
-        builder.addDnsServer("8.8.8.8")
-        builder.addDnsServer("1.1.1.1")
+        builder.addDnsServer("8.8.8.8") // Google DNS as primary
+        builder.addDnsServer("1.1.1.1") // Cloudflare DNS
+        builder.addDnsServer("198.18.0.2") // MapDNS as fallback
         builder.addAddress("172.19.0.1", 24)
 
         try {
