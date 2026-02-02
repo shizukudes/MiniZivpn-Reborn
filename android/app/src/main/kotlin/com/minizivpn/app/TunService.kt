@@ -9,6 +9,10 @@ import android.app.PendingIntent
 import java.net.InetAddress
 import java.util.LinkedList
 
+/**
+ * ZIVPN TunService
+ * Handles the VpnService interface and integrates with hev-socks5-tunnel.
+ */
 class TunService : VpnService() {
 
     companion object {
@@ -19,7 +23,7 @@ class TunService : VpnService() {
             try {
                 System.loadLibrary("hev-socks5-tunnel")
             } catch (e: UnsatisfiedLinkError) {
-                Log.e("TunService", "Failed to load native library: ${e.message}")
+                Log.e("ZIVPN-Tun", "Native library load failed: ${e.message}")
             }
         }
     }
@@ -48,7 +52,7 @@ class TunService : VpnService() {
     private fun connect() {
         if (vpnInterface != null) return
 
-        Log.i("TunService", "Starting VPN Interface...")
+        Log.i("ZIVPN-Tun", "Initializing ZIVPN Tunneling...")
         
         val pendingIntent = PendingIntent.getActivity(
             this, 0, Intent(this, MainActivity::class.java),

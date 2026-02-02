@@ -175,7 +175,7 @@ class _HysteriaConfigPageState extends State<HysteriaConfigPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Mini ZIVPN Turbo"),
+        title: const Text("ZIVPN Turbo v1.0"),
         centerTitle: true,
         actions: [
           IconButton(

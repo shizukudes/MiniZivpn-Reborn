@@ -13,6 +13,10 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Bundle
 
+/**
+ * ZIVPN Turbo Main Activity
+ * Optimized for high-performance tunneling and aggressive cleanup.
+ */
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "com.minizivpn.app/core"
     private val LOG_CHANNEL = "com.minizivpn.app/logs"
@@ -24,7 +28,7 @@ class MainActivity: FlutterActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Aggressive cleanup on app launch to ensure clean ports
+        // Ensure environment is clean on launch
         stopEngine()
     }
 
@@ -35,7 +39,7 @@ class MainActivity: FlutterActivity() {
             object : EventChannel.StreamHandler {
                 override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
                     logSink = events
-                    sendToLog("Log system attached.")
+                    sendToLog("Logging system initialized.")
                 }
                 override fun onCancel(arguments: Any?) {
                     logSink = null
@@ -69,7 +73,7 @@ class MainActivity: FlutterActivity() {
         uiHandler.post {
             logSink?.success(msg)
         }
-        Log.d("MiniZIVPN", msg)
+        Log.d("ZIVPN-Core", msg)
     }
 
     private fun startVpn(result: MethodChannel.Result) {
